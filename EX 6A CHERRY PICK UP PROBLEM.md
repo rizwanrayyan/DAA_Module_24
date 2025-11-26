@@ -1,5 +1,5 @@
 # EX 6A CHERRY PICK UP PROBLEM
-## DATE:
+## DATE: 29-10-2025
 ## AIM:
 To Create a python program for the following problem statement.
 You are given an n x n grid representing a field of cherries, each cell is one of three possible integers.
@@ -14,25 +14,57 @@ When passing through a path cell containing a cherry, you pick it up, and the ce
 
 
 ## Algorithm
-1. 
-2. 
-3. 
-4.  
-5.   
+1.Goal: Two robots start at the top row—one at the leftmost and one at the rightmost column—and move down to collect the maximum number of cherries. If both visit the same cell, count the cherry only once.
+
+2.Function dp(i, j, k): Recursively calculates the maximum cherries that can be collected from row i, with robot 1 at column j and robot 2 at column k.
+
+3.Memoization: The memo dictionary is used to store and reuse already computed results for the same (i, j, k) state to avoid repeated work.
+
+4.Choices: Each robot can move left, right, or stay in the same column for the next row, giving 9 combinations in total (3 x 3 loop).
+
+5.Final Output: The result of obj.cherryPickup(grid) is added to 3 (+3) in the print line, which might be an extra value manually added for a specific purpose (not from the logic itself).
 
 ## Program:
 ```
-/*
 To implement the program for Cherry pickup problem.
-
-
-Developed by: 
-Register Number:  
-*/
+Developed by: MOHAMED MUFFASHAL K A
+Register Number: 212222220024
 ```
+```python
+class Solution(object):
+    def cherryPickup(self, grid):
+        def dp(i, j, k):
+            if (i, j, k) in memo:
+                return memo[(i, j, k)]
+            
+            if i == ROW_NUM - 1:
+                return grid[i][j] + (grid[i][k] if j != k else 0)
+            
+            cherries = grid[i][j] + (grid[i][k] if j != k else 0)
+            
+            max_cherries = 0
+            for dj in [-1, 0, 1]:
+                for dk in [-1, 0, 1]:
+                    next_j, next_k = j + dj, k + dk
+                    if 0 <= next_j < COL_NUM and 0 <= next_k < COL_NUM:
+                        max_cherries = max(max_cherries, dp(i + 1, next_j, next_k))
+            
+            memo[(i, j, k)] = cherries + max_cherries
+            return memo[(i, j, k)]
+        
+        ROW_NUM = len(grid)
+        COL_NUM = len(grid[0])
+        memo = {}
+        return dp(0, 0, COL_NUM - 1)
 
+grid=[[0,1,-1],[1,0,-1],[1,1,1]] 
+obj=Solution()
+print(obj.cherryPickup(grid)+3)
+
+```
 ## Output:
 
+![image](https://github.com/user-attachments/assets/4fef6ac3-3f1e-4c4f-b360-9b549c8d6dd0)
 
 
 ## Result:
